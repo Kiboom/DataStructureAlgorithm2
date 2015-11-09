@@ -14,16 +14,17 @@ public class MergeSort {
 		}
 		
 		if(start<end){
-			int mid = (start+end)/2;
+			int mid = start + (end-start)/2;
 			mergeSort(arr, start, mid);
 			mergeSort(arr, mid+1, end);
-			mergeTwoArrays(arr, start, mid, end);
+			mergeTwoArrays(arr, start, end);
 		}
 		
 		return arr;
 	}
 	
-	public static void mergeTwoArrays(int[] arr, int start, int mid, int end){
+	public static void mergeTwoArrays(int[] arr, int start, int end){
+		int mid = start + (end-start)/2;
 		
 		int[] result = new int[arr.length];
 		int resultIdx = start;
