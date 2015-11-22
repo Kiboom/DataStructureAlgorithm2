@@ -6,6 +6,7 @@ public class Test {
 
 	public static void main(String[] args) {
 
+		MaxSubarrayFinder_n finder_n = new MaxSubarrayFinder_n();		 // O(n) 방법
 		MaxSubarrayFinder_n2 finder_n2 = new MaxSubarrayFinder_n2();		 // O(n^2) 방법
 		MaxSubarrayFinder_nlogn finder_nlogn = new MaxSubarrayFinder_nlogn();  // O(nlogn) 방법
 		
@@ -20,21 +21,22 @@ public class Test {
 		int[][] testArrays = {arr1, arr2, arr3, arr4, arr5, arr6, arr7};
 		
 		for(int[] arr : testArrays){
-			ResultInfo result_n2 = finder_n2.findMaxSubarray(arr, 0, arr.length-1);
-			ResultInfo result_nlogn = finder_nlogn.findMaxSubarray(arr, 0, arr.length-1);
+			MaxSubarray result_n = finder_n.getMaxSubarray(arr, 0, arr.length-1);
+			MaxSubarray result_n2 = finder_n2.getMaxSubarray(arr, 0, arr.length-1);
+			MaxSubarray result_nlogn = finder_nlogn.getMaxSubarray(arr, 0, arr.length-1);
 			System.out.println(Arrays.toString(arr));
+			System.out.println(result_n + " - O(n) 방법");
 			System.out.println(result_n2 + " - O(n^2) 방법");
 			System.out.println(result_nlogn + " - O(nlogn) 방법");
-			System.out.println(isTwoResultsSame(result_n2, result_nlogn) + "\n");
+			System.out.println("O(n)과 O(nlogn) 방법 비교 : " + isTwoResultsSame(result_n, result_nlogn));
+			System.out.println("O(nlogn)과 O(n^2) 방법 비교 : " + isTwoResultsSame(result_nlogn, result_n2) + "\n");
 		}
 	}
 
-	public static boolean isTwoResultsSame(ResultInfo result_n2, ResultInfo result_nlogn){
-		if(result_n2.getMaxSum()==result_nlogn.getMaxSum()){
-			System.out.print("두 결과는 같습니다! ");
-			return true;
+	public static String isTwoResultsSame(MaxSubarray result_n2, MaxSubarray result_nlogn){
+		if(result_n2.getSum()==result_nlogn.getSum()){
+			return "두 결과는 같습니다!";
 		}
-		System.out.print("두 결과는 다릅니다! ");
-		return false;
+		return "두 결과는 다릅니다!";
 	}
 }

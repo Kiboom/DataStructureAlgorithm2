@@ -2,37 +2,32 @@ package maximum_subarray;
 
 public class MaxSubarrayFinder_nlogn {
 
-	// ResultInfo : lowIdx, highIdx, maxSum
-	public ResultInfo findMaxSubarray(int[] array, int lowIdx, int highIdx){
-		if(array==null || array.length<=0){
-			System.out.println("빈 배열이 들어왔습니다!");
-			return null;
-		}
-		if(lowIdx>highIdx || lowIdx<0 || highIdx<0 || lowIdx>=array.length || highIdx>=array.length){
-			System.out.println("인덱스 범위 오류!");
+	// MaxSubarray : lowIdx, highIdx, maxSum
+	public MaxSubarray getMaxSubarray(int[] arr, int lowIdx, int highIdx){
+		if(exceptionChecker(arr, lowIdx, highIdx)){
 			return null;
 		}
 		if(lowIdx==highIdx){	
-			return new ResultInfo(lowIdx, highIdx, array[lowIdx]);
+			return new MaxSubarray(lowIdx, highIdx, arr[lowIdx]);
 		}
 		
 		int midIdx = lowIdx + (highIdx-lowIdx)/2;
 		
-		ResultInfo leftMaxSubarray = findMaxSubarray(array, lowIdx, midIdx);
-		ResultInfo rightMaxSubarray = findMaxSubarray(array, midIdx+1, highIdx);
-		ResultInfo crossingMaxSubarray = findMaxCrossingSubarray(array, lowIdx, highIdx);
+		MaxSubarray leftMaxSubarray = getMaxSubarray(arr, lowIdx, midIdx);
+		MaxSubarray rightMaxSubarray = getMaxSubarray(arr, midIdx+1, highIdx);
+		MaxSubarray crossingMaxSubarray = findMaxCrossingSubarray(arr, lowIdx, highIdx);
 		
 		return compareSubarrays(leftMaxSubarray, rightMaxSubarray, crossingMaxSubarray);
 	}
 	
 	
-	private ResultInfo compareSubarrays(ResultInfo leftMaxSubarray, ResultInfo rightMaxSubarray, ResultInfo crossingMaxSubarray) {
-		if(leftMaxSubarray.getMaxSum() >= rightMaxSubarray.getMaxSum() 
-				&& leftMaxSubarray.getMaxSum() >= crossingMaxSubarray.getMaxSum() ){
+	private MaxSubarray compareSubarrays(MaxSubarray leftMaxSubarray, MaxSubarray rightMaxSubarray, MaxSubarray crossingMaxSubarray) {
+		if(leftMaxSubarray.getSum() >= rightMaxSubarray.getSum() 
+				&& leftMaxSubarray.getSum() >= crossingMaxSubarray.getSum() ){
 			return leftMaxSubarray;
 		}
-		else if(rightMaxSubarray.getMaxSum() >= leftMaxSubarray.getMaxSum() 
-				&& rightMaxSubarray.getMaxSum() >= crossingMaxSubarray.getMaxSum() ){
+		else if(rightMaxSubarray.getSum() >= leftMaxSubarray.getSum() 
+				&& rightMaxSubarray.getSum() >= crossingMaxSubarray.getSum() ){
 			return rightMaxSubarray;
 		}
 		else
@@ -40,40 +35,47 @@ public class MaxSubarrayFinder_nlogn {
 	}
 
 
-	ResultInfo findMaxCrossingSubarray(int[] array, int lowIdx, int highIdx){
-		if(array==null || array.length<=0){
-			System.out.println("빈 배열이 들어왔습니다!");
-			return null;
-		}
-		if(lowIdx>highIdx || lowIdx<0 || highIdx<0 || lowIdx>=array.length || highIdx>=array.length){
-			System.out.println("인덱스 범위 오류!");
+	MaxSubarray findMaxCrossingSubarray(int[] arr, int lowIdx, int highIdx){
+		if(exceptionChecker(arr, lowIdx, highIdx)){
 			return null;
 		}
 		if(lowIdx==highIdx){
-			return new ResultInfo(lowIdx, highIdx, array[lowIdx]);
+			return new MaxSubarray(lowIdx, highIdx, arr[lowIdx]);
 		}
 		
 		int midIdx = lowIdx + (highIdx-lowIdx)/2;
 		int maxLeft=midIdx, maxRight=midIdx+1;
-		int leftSum=array[midIdx], leftMaxSum=array[midIdx];
-		int rightSum=array[midIdx+1], rightMaxSum=array[midIdx+1];
+		int leftSum=arr[midIdx], leftMaxSum=arr[midIdx];
+		int rightSum=arr[midIdx+1], rightMaxSum=arr[midIdx+1];
 		
 		for(int i=midIdx-1 ; i>=lowIdx ; i--){
-			leftSum += array[i];
+			leftSum += arr[i];
 			if(leftSum>leftMaxSum){
 				leftMaxSum = leftSum;
 				maxLeft = i;
 			}
 		}
 		for(int i=midIdx+2 ; i<=highIdx ; i++){
-			rightSum += array[i];
+			rightSum += arr[i];
 			if(rightSum>rightMaxSum){
 				rightMaxSum = rightSum;
 				maxRight = i;
 			}
 		}
 		
-		return new ResultInfo(maxLeft, maxRight, leftMaxSum+rightMaxSum); 
+		return new MaxSubarray(maxLeft, maxRight, leftMaxSum+rightMaxSum); 
+	}
+	
+	public boolean exceptionChecker(int[] arr, int lowIdx, int highIdx){
+		if(arr==null || arr.length<=0){
+			System.out.println("빈 배열이 들어왔습니다!");
+			return true;
+		}
+		if(lowIdx>highIdx || lowIdx<0 || highIdx<0 || lowIdx>=arr.length || highIdx>=arr.length){
+			System.out.println("인덱스 범위 오류!");
+			return true;
+		}
+		return false;
 	}
 	
 }

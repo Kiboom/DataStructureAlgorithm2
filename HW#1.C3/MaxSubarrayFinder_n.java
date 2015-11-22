@@ -1,37 +1,33 @@
 package maximum_subarray;
 
-import java.util.ArrayList;
-
-public class MaxSubarrayFinder_n2 {
+public class MaxSubarrayFinder_n {
 
 	// MaxSubarray : lowIdx, highIdx, maxSum
 	public MaxSubarray getMaxSubarray(int[] arr, int lowIdx, int highIdx){
 		if(exceptionChecker(arr, lowIdx, highIdx)){
 			return null;
-		}		
-		
-		ArrayList<MaxSubarray> pairs = new ArrayList<MaxSubarray>(); 
-		
-		for(int i=lowIdx ; i<=highIdx ; i++){
-			int maxIdx=i;
-			int sum=arr[i], maxSum=arr[i];
-			for(int j=i+1 ; j<=highIdx ; j++){
-				sum += arr[j];
-				if(sum > maxSum){
-					maxSum = sum;
-					maxIdx = j;
-				}
-			}
-			pairs.add(new MaxSubarray(i, maxIdx, maxSum));
 		}
 		
-		MaxSubarray maxPairs = pairs.get(0);
-		for(int i=1 ; i<pairs.size() ; i++){
-			if(pairs.get(i).getSum() > maxPairs.getSum()){
-				maxPairs = pairs.get(i);
+		MaxSubarray[] suffixes = new MaxSubarray[highIdx+1]; 
+		suffixes[lowIdx] = new MaxSubarray(lowIdx, lowIdx, arr[lowIdx]);
+		
+		for(int i=lowIdx+1 ; i<=highIdx ; i++){
+			if(suffixes[i-1].getSum() < 0){
+				suffixes[i] = new MaxSubarray(i, i, arr[i]);
+			}
+			else{
+				MaxSubarray previous = suffixes[i-1];
+				suffixes[i] = new MaxSubarray(previous.getLowIdx(), i, previous.getSum() + arr[i]);
 			}
 		}
-		return maxPairs;
+		
+		MaxSubarray max = suffixes[lowIdx];
+		for(int i=lowIdx+1 ; i<=highIdx ; i++){
+			if(max.getSum() < suffixes[i].getSum()){
+				max=suffixes[i];
+			}
+		}
+		return max;
 	}
 	
 	public boolean exceptionChecker(int[] arr, int lowIdx, int highIdx){
