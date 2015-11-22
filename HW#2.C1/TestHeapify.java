@@ -4,6 +4,7 @@ import static heap_sort.MaxHeapify.maxHeapify;
 
 public class TestHeapify {
 
+	// HeapTree : [int size, int[] elements]
 	public static void main(String[] args) {
 		HeapTree heap = makeSampleHeap(11);
 		

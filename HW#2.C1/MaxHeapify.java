@@ -2,6 +2,7 @@ package heap_sort;
 
 public class MaxHeapify {
 
+	// HeapTree : [int size, int[] elements]
 	public static void maxHeapify (HeapTree heap, int pos){
 		if(heap==null){
 			return;
